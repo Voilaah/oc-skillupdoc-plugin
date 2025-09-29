@@ -1,7 +1,7 @@
 {
-    "name": "egerstudios/markdowndocs-plugin",
+    "name": "voilaah/skillupdoc-plugin",
     "type": "october-plugin",
-    "description": "Display markdown files in the backend for documentation purposes",
+    "description": "Auto-Build and Display markdown files in the backend for documentation purposes",
     "require": {
         "composer/installers": "~1.0",
         "erusev/parsedown": "^1.7",
@@ -12,13 +12,6 @@
             "composer/installers": true
         }
     },
-    "homepage": "https://github.com/egerstudios/oc-markdowndocs-plugin",
+    "homepage": "https://github.com/Voilaah/oc-skillupdoc-plugin.git",
     "keywords": ["october", "octobercms", "documentation", "markdown"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Jan Tore Eger-Schøyen",
-            "email": "egerstudio.utvikling@gmail.com"
-        }
-    ]
 }
