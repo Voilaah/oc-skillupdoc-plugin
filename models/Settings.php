@@ -1,4 +1,5 @@
-<?php namespace EgerStudios\MarkdownDocs\Models;
+<?php
+namespace Voilaah\SkillupDoc\Models;
 
 use Model;
 use System\Models\SettingModel;
@@ -10,6 +11,6 @@ use System\Models\SettingModel;
  */
 class Settings extends SettingModel
 {
-    public $settingsCode = 'egerstudios_markdowndocs_settings';
+    public $settingsCode = 'voilaah_markdowndocs_settings';
     public $settingsFields = 'fields.yaml';
 }

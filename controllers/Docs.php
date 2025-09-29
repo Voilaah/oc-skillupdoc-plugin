@@ -1,11 +1,13 @@
-<?php namespace EgerStudios\MarkdownDocs\Controllers;
+<?php
+namespace Voilaah\SkillupDoc\Controllers;
 
 use BackendMenu;
 use Backend\Classes\Controller;
-use EgerStudios\MarkdownDocs\Models\Settings;
+use Voilaah\SkillupDoc\Models\Settings;
 use Parsedown;
 use File;
 use Storage;
+use Event;
 use Yaml;
 use Log;
 
@@ -23,23 +25,23 @@ class Docs extends Controller
     /**
      * @var array required permissions
      */
-    public $requiredPermissions = ['egerstudios.markdowndocs.docs'];
+    public $requiredPermissions = ['voilaah.markdowndocs.docs'];
 
 
     /**
      * @var string Path to the documentation files
      */
     private $docsPath;
-    
+
     /**
      * @var Settings Instance of the Settings model
      */
     private $settings;
-    
+
 
     /**
      * Constructor for the Docs controller
-     * 
+     *
      * Initializes the controller, sets up the documentation path,
      * adds CSS assets, and sets the backend menu context.
      */
@@ -50,23 +52,23 @@ class Docs extends Controller
         $this->settings = Settings::instance();
 
         // usage: in your plugin boot method
-        // Event::listen("markdowndocs.docspath", fn() => plugins_path('acme/blog/docs/'));
-        $externalDocsPath = Event::fire("markdowndocs.docspath", []);
+        // Event::listen("skillupdoc.docspath", fn() => plugins_path('acme/blog/docs/'));
+        $externalDocsPath = Event::fire("skillupdoc.docspath", []);
 
         if ($externalDocsPath && is_array($externalDocsPath)) {
             $this->docsPath = $externalDocsPath[0];
         } else {
-            $this->docsPath = $this->settings->storage_path ? Storage::path($this->settings->storage_path) : plugins_path('egerstudios/markdowndocs/docs/');
-        }        
-        
-        $this->addCss('/plugins/egerstudios/markdowndocs/assets/css/docs.css');
-        BackendMenu::setContext('EgerStudios.MarkdownDocs', 'markdowndocs', 'docs');
-        
+            $this->docsPath = $this->settings->storage_path ? Storage::path($this->settings->storage_path) : plugins_path('voilaah/skillupdoc/docs/');
+        }
+
+        $this->addCss('/plugins/voilaah/skillupdoc/assets/css/docs.css');
+        BackendMenu::setContext('voilaah.MarkdownDocs', 'markdowndocs', 'docs');
+
     }
 
     /**
      * Index page action
-     * 
+     *
      * Displays the documentation page with a list of available markdown files
      * and renders the selected file's content.
      */
@@ -80,9 +82,9 @@ class Docs extends Controller
 
         // Load the default file (first one) or the selected file
         $selectedFile = input('file', array_key_first($files));
-        
+
         $parsed = $this->parseMarkdownFile($selectedFile);
-        
+
         $this->vars['content'] = $parsed['content'];
         $this->vars['meta'] = $parsed['meta'];
         $this->vars['selectedFile'] = $selectedFile;
@@ -91,10 +93,10 @@ class Docs extends Controller
 
     }
 
-    
+
     /**
      * Parses a markdown file and returns its content and metadata
-     * 
+     *
      * @param string $filename The name of the markdown file to parse
      * @return array An array containing the parsed content and metadata
      */
@@ -106,10 +108,10 @@ class Docs extends Controller
         }
 
         $content = File::get($filePath);
-        
+
         // Parse meta data and content
         $parsed = $this->parseFileContent($content);
-        
+
         $parsedown = new Parsedown();
         return [
             'content' => $parsedown->text($parsed['content']),
@@ -119,13 +121,14 @@ class Docs extends Controller
 
     /**
      * Parses the content of a markdown file to extract metadata and content
-     * 
+     *
      * @param string $content The raw content of the markdown file
      * @return array An array containing the metadata and content
      */
-    private function parseFileContent($content) {
+    private function parseFileContent($content)
+    {
         $pattern = '/^---[\r\n|\r|\n](.*?)[\r\n|\r|\n]---[\r\n|\r|\n](.*)/s';
-        
+
         if (preg_match($pattern, $content, $matches)) {
             try {
                 $yamlString = trim($matches[1]);
@@ -149,7 +152,7 @@ class Docs extends Controller
 
     /**
      * Gets all markdown files with their metadata
-     * 
+     *
      * @return array An associative array of markdown files with their metadata and content
      */
     private function getMarkdownFilesWithMeta()
@@ -166,8 +169,8 @@ class Docs extends Controller
 
         // Sort files based on position from meta data
         uasort($files, function ($a, $b) {
-            $posA = isset($a['meta']['position']) ? (int)$a['meta']['position'] : PHP_INT_MAX;
-            $posB = isset($b['meta']['position']) ? (int)$b['meta']['position'] : PHP_INT_MAX;
+            $posA = isset($a['meta']['position']) ? (int) $a['meta']['position'] : PHP_INT_MAX;
+            $posB = isset($b['meta']['position']) ? (int) $b['meta']['position'] : PHP_INT_MAX;
             return $posA <=> $posB;
         });
 
@@ -176,7 +179,7 @@ class Docs extends Controller
 
     /**
      * Gets a list of all markdown files in the docs directory
-     * 
+     *
      * @return array An array of markdown filenames
      */
     private function getMarkdownFiles()
@@ -186,14 +189,14 @@ class Docs extends Controller
 
     /**
      * AJAX handler for selecting a file
-     * 
+     *
      * @return array Partial view data for updating the content area
      */
     public function onSelectFile()
     {
         $filename = post('file');
         $parsed = $this->parseMarkdownFile($filename);
-        
+
         return [
             '#layout-body' => $this->makePartial('content', [
                 'content' => $parsed['content']
@@ -202,7 +205,7 @@ class Docs extends Controller
     }
 
 
-    
 
-    
+
+
 }

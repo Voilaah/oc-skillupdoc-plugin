@@ -1,4 +1,5 @@
-<?php namespace EgerStudios\MarkdownDocs\Updates;
+<?php
+namespace Voilaah\SkillupDoc\Updates;
 
 use Schema;
 use October\Rain\Database\Schema\Blueprint;
@@ -9,14 +10,13 @@ use October\Rain\Database\Updates\Migration;
  *
  * @link https://docs.octobercms.com/3.x/extend/database/structure.html
  */
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * up builds the migration
      */
     public function up()
     {
-        Schema::create('egerstudios_markdowndocs_settings', function(Blueprint $table) {
+        Schema::create('voilaah_markdowndocs_settings', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('egerstudios_markdowndocs_settings');
+        Schema::dropIfExists('voilaah_markdowndocs_settings');
     }
 };

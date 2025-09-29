@@ -1,5 +1,8 @@
-<?php namespace EgerStudios\MarkdownDocs;
+<?php
 
+namespace Voilaah\SkillupDoc;
+
+use Event;
 use Backend;
 use System\Classes\PluginBase;
 
@@ -18,7 +21,7 @@ class Plugin extends PluginBase
         return [
             'name' => 'MarkdownDocs',
             'description' => 'No description provided yet...',
-            'author' => 'EgerStudios',
+            'author' => 'voilaah',
             'icon' => 'icon-leaf'
         ];
     }
@@ -37,6 +40,7 @@ class Plugin extends PluginBase
     public function boot()
     {
         //
+        Event::listen("skillupdoc.docspath", fn() => plugins_path('voilaah/skillupdoc/docs/'));
     }
 
     /**
@@ -47,7 +51,7 @@ class Plugin extends PluginBase
         return []; // Remove this line to activate
 
         return [
-            'EgerStudios\MarkdownDocs\Components\MyComponent' => 'myComponent',
+            'Voilaah\MarkdownDocs\Components\MyComponent' => 'myComponent',
         ];
     }
 
@@ -57,7 +61,7 @@ class Plugin extends PluginBase
     public function registerPermissions()
     {
         return [
-            'egerstudios.markdowndocs.docs' => [
+            'voilaah.markdowndocs.docs' => [
                 'tab' => 'MarkdownDocs',
                 'label' => 'Access the documentation'
             ],
@@ -73,9 +77,9 @@ class Plugin extends PluginBase
         return [
             'markdowndocs' => [
                 'label' => 'Docs',
-                'url' => Backend::url('egerstudios/markdowndocs/docs'),
+                'url' => Backend::url('voilaah/skillupdoc/docs'),
                 'icon' => 'icon-book',
-                'permissions' => ['egerstudios.markdowndocs.*'],
+                'permissions' => ['voilaah.markdowndocs.*'],
                 'order' => 500,
             ],
         ];
@@ -89,7 +93,7 @@ class Plugin extends PluginBase
                 'description' => 'Manage docs based settings.',
                 'category' => 'Documentation',
                 'icon' => 'icon-cog',
-                'class' => \EgerStudios\MarkdownDocs\Models\Settings::class,
+                'class' => \Voilaah\MarkdownDocs\Models\Settings::class,
             ]
         ];
     }
